@@ -8,7 +8,7 @@ namespace SDD
 {
     public static partial class Program
     {
-        public const string Nom = "Olga Cazacioc";
+        public const string Nom = "Olg Cazacioc";
         public const string Initiales = "OC";
 
         public static void Main()
