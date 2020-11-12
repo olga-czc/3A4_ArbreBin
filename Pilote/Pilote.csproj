@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="cstjean.info.fg.consoleplus" Version="1.12.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ArbreBinLib\ArbreBinLib.csproj" />
+  </ItemGroup>
+
+</Project>
