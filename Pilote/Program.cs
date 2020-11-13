@@ -1,6 +1,7 @@
 ﻿// Pour Étudiant, phase 1
 
 using System;
+using System.Text;
 
 using static cstjean.info.fg.consoleplus.ConsolePlus;
 
@@ -14,6 +15,9 @@ namespace SDD
         public static void Main()
         {
             Console.SetWindowSize(Console.LargestWindowWidth - 15, Console.LargestWindowHeight - 6);
+            // Certains étudiants n'ont pas une console UTF8 par défaut
+            // Mais on a besoin d'UTF8 pour mieux afficher les arbres en 2D.
+            Console.OutputEncoding = UTF8Encoding.UTF8;
             IndentationGénérale = 2;
 
             Menu2();
