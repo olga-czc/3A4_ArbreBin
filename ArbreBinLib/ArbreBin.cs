@@ -119,7 +119,8 @@ namespace ArbreBinLib
         // -------------- 1 - Dénombrement de base ----------------
  
 
-        public static int TailleR(Noeud? arbre) => throw new NotImplementedException();
+        public static int TailleR(Noeud? arbre) => arbre == null? 0: (TailleR(arbre.Gauche) + TailleR(arbre.Droite) + 1);
+     
 
         public static int TailleP(Noeud? arbre) => throw new NotImplementedException();
 
