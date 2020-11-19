@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -226,7 +227,6 @@ namespace ArbreBinLib
         public static IEnumerable<Noeud> Feuilles(Noeud? arbre)
         {
             List<Noeud> feuilles = new List<Noeud>();
-            //int nbFeuilles = 0;
             parcourir(arbre);
             return feuilles;
 
@@ -262,9 +262,40 @@ namespace ArbreBinLib
             }
         }
 
-        public static int[] Largeurs(Noeud? arbre) => throw new NotImplementedException();
+        public static int[] Largeurs(Noeud? arbre)
+        {
+            List<int> listeLargeurs = new List<int>();
 
-        public static int Largeur(Noeud? arbre) => throw new NotImplementedException();
+            int hauteur = Hauteur(arbre);
+
+            for (int i = 1; i <= hauteur; i++)
+            {
+                listeLargeurs.Add(obtLargeur(arbre, i));
+            }
+
+            int obtLargeur(Noeud noeud, int level)
+            {
+                if (noeud == null)
+                {
+                    return 0;
+                }
+
+                if (level == 1)
+                {
+                    return 1;
+                }
+                else if (level > 1)
+                {
+                    return obtLargeur(noeud.Gauche, level - 1)
+                        + obtLargeur(noeud.Droite, level - 1);
+                }
+                return 0;
+            }
+
+            return listeLargeurs.ToArray();
+        }
+
+        public static int Largeur(Noeud? arbre) => arbre is null? 0: Largeurs(arbre).Max();  // table.Max(x => x.Status)
 
 
         // ---------------- 4 - Recherche -----------------
