@@ -59,7 +59,7 @@ namespace ArbreBinLib
                         else
                             return ($"R[.{Key}.]");
                     }
-                    else 
+                    else
                     {
                         if (Droite == null && Gauche == null)
                             return ($"R[{Key}|{Value}]");
@@ -84,7 +84,7 @@ namespace ArbreBinLib
                         else
                             return ($"[.{Key}.]");
                     }
-                    else 
+                    else
                     {
                         if (Droite == null && Gauche == null)
                             return ($"[{Key}|{Value}]");
@@ -101,13 +101,15 @@ namespace ArbreBinLib
             //-----Propriétés calculables-----
             public EspèceDeNoeud Espèce
             {
-                get { if (Gauche != null && Droite != null) 
+                get
+                {
+                    if (Gauche != null && Droite != null)
                         return EspèceDeNoeud.Embranchement;
-                      else if( Gauche != null && Droite == null)
+                    else if (Gauche != null && Droite == null)
                         return EspèceDeNoeud.TigeGauche;
-                      else if (Gauche == null && Droite != null)
+                    else if (Gauche == null && Droite != null)
                         return EspèceDeNoeud.TigeDroite;
-                      else return EspèceDeNoeud.Feuille;
+                    else return EspèceDeNoeud.Feuille;
                 }
             }
 
@@ -115,12 +117,12 @@ namespace ArbreBinLib
 
             public int? ProfondeurRelative(Noeud? ancêtre) => throw new NotImplementedException();
         }
-        
-        // -------------- 1 - Dénombrement de base ----------------
- 
 
-        public static int TailleR(Noeud? arbre) => arbre == null? 0: (TailleR(arbre.Gauche) + TailleR(arbre.Droite) + 1);
-     
+        // -------------- 1 - Dénombrement de base ----------------
+
+
+        public static int TailleR(Noeud? arbre) => arbre == null ? 0 : (TailleR(arbre.Gauche) + TailleR(arbre.Droite) + 1);
+
 
         public static int TailleP(Noeud? arbre)
         {
@@ -137,10 +139,10 @@ namespace ArbreBinLib
             }
         }
 
-        public static int NbFeuillesR(Noeud? arbre) => arbre is null? 0:
-            arbre.Gauche is null && arbre.Droite is null? 1 :
+        public static int NbFeuillesR(Noeud? arbre) => arbre is null ? 0 :
+            arbre.Gauche is null && arbre.Droite is null ? 1 :
             (NbFeuillesR(arbre.Gauche) + NbFeuillesR(arbre.Droite));
-      
+
 
         public static int NbFeuillesP(Noeud? arbre)
         {
@@ -152,7 +154,7 @@ namespace ArbreBinLib
             {
                 if (noeud is null)
                     return;
-         
+
                 else
                 {
                     if (noeud.Espèce == EspèceDeNoeud.Feuille)
@@ -160,7 +162,6 @@ namespace ArbreBinLib
                     parcourir(noeud.Gauche);
                     parcourir(noeud.Droite);
                 }
-            
             }
         }
 
@@ -176,63 +177,89 @@ namespace ArbreBinLib
                 if (noeud is null) return;
                 else
                 {
-                    if (espèce == EspèceDeNoeud.Feuille)
-                    {
-                        //if (noeud.Gauche is null && noeud.Droite is null)
-                        //{
-                        //    nbEspèce = 1;
-                        //    return;
-                        //}
-                        //else
-                        //{
-                            if (arbre.Espèce == EspèceDeNoeud.Feuille)
-                                nbEspèce++;
-                            parcourir(noeud.Gauche, espèce);
-                            parcourir(noeud.Droite, espèce);
-                        //}
-                    }
-                    else if (espèce == EspèceDeNoeud.Embranchement)
-                    {
-                        if (arbre.Espèce == EspèceDeNoeud.Embranchement)
-                            nbEspèce++;
-                        parcourir(noeud.Gauche, espèce);
-                        parcourir(noeud.Droite, espèce);
-                    }
-                    else if (espèce == EspèceDeNoeud.TigeDroite)
-                    {
-                        if (arbre.Espèce == EspèceDeNoeud.TigeDroite)
-                            nbEspèce++;
-                        parcourir(noeud.Gauche, espèce);
-                        parcourir(noeud.Droite, espèce);
-                    }
-                    else if (espèce == EspèceDeNoeud.TigeGauche)
-                    {
-                        if (arbre.Espèce == EspèceDeNoeud.TigeGauche)
-                            nbEspèce++;
-                        parcourir(noeud.Gauche, espèce);
-                        parcourir(noeud.Droite, espèce);
-                    }
+                    if (noeud.Espèce == espèce)
+                        nbEspèce++;
+                    parcourir(noeud.Gauche, espèce);
+                    parcourir(noeud.Droite, espèce);
                 }
             }
         }
         public static (int NbEmbranchements, int NbTigesGauches, int NbTigesDroites, int NbFeuilles)
-            NbToutesEspècesNR(Noeud? arbre) => throw new NotImplementedException();
+            NbToutesEspècesNR(Noeud? arbre)
+        {
+            return (NbEspèce(arbre, EspèceDeNoeud.Embranchement), NbEspèce(arbre, EspèceDeNoeud.TigeGauche),
+                NbEspèce(arbre, EspèceDeNoeud.TigeDroite), NbEspèce(arbre, EspèceDeNoeud.Feuille));
+        }
 
         public static (int NbEmbranchements, int NbTigesGauches, int NbTigesDroites, int NbFeuilles)
-           NbToutesEspècesR(Noeud? arbre) => throw new NotImplementedException();
+           NbToutesEspècesR(Noeud? arbre)
+        {
+            int nbEmbranchements = 0;
+            int nbTigesGauches = 0;
+            int nbTigesDroites = 0;
+            int nbFeuilles = 0;
+            parcourir(arbre);
+            return (nbEmbranchements, nbTigesGauches, nbTigesDroites, nbFeuilles);
 
-        public static IEnumerable<Noeud> Feuilles(Noeud? arbre) => throw new NotImplementedException();
-    
+            void parcourir(Noeud? noeud)
+            {
+                if (noeud is null)
+                    return;
+
+                else
+                {
+                    if (noeud.Espèce == EspèceDeNoeud.Embranchement)
+                        nbEmbranchements++;
+                    if (noeud.Espèce == EspèceDeNoeud.TigeGauche)
+                        nbTigesGauches++;
+                    if (noeud.Espèce == EspèceDeNoeud.TigeDroite)
+                        nbTigesDroites++;
+                    if (noeud.Espèce == EspèceDeNoeud.Feuille)
+                        nbFeuilles++;
+                    parcourir(noeud.Gauche);
+                    parcourir(noeud.Droite);
+                }
+            }
+        }
+
+
+        public static IEnumerable<Noeud> Feuilles(Noeud? arbre)
+        {
+            List<Noeud> feuilles = new List<Noeud>();
+            //int nbFeuilles = 0;
+            parcourir(arbre);
+            return feuilles;
+
+            void parcourir(Noeud? noeud)
+            {
+                if (noeud != null)
+                {
+                    if (noeud.Espèce == EspèceDeNoeud.Feuille)
+                        feuilles.Add(noeud);
+                    parcourir(noeud.Gauche);
+                    parcourir(noeud.Droite);
+                }
+            }
+        }
+
 
         // ---------------- 3 - Dimensions ---------------
 
-        public static int Hauteur(Noeud? arbre) 
+        public static int Hauteur(Noeud? arbre)
         {
+            if (arbre == null)
+                return 0;
 
-            if(arbre == null)
-            return 0;
+            else
+            {
+                int hGauche = Hauteur(arbre.Gauche);
+                int hDroite = Hauteur(arbre.Droite);
 
-            return (Hauteur(arbre.Gauche) + Hauteur(arbre.Droite) + 1);
+                if (hGauche > hDroite)
+                    return (hGauche + 1);
+                else
+                    return (hDroite + 1);
+            }
         }
 
         public static int[] Largeurs(Noeud? arbre) => throw new NotImplementedException();
@@ -250,6 +277,6 @@ namespace ArbreBinLib
 
         public static Noeud? ChercherR(Noeud? arbre, TKey clé) => throw new NotImplementedException();
 
-      
+
     }
 }
