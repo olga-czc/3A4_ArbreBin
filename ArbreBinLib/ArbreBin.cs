@@ -38,10 +38,53 @@ namespace ArbreBinLib
             }
 
             // ----Propriétés additionnelles -----
-            public Noeud Racine => throw new NotImplementedException();
-            public int Profondeur => throw new NotImplementedException();
-            public Noeud PlusGauche => throw new NotImplementedException();
-            public Noeud PlusDroite => throw new NotImplementedException();
+            public Noeud Racine
+            {
+
+                get
+                {
+                    while (Parent != null)
+                    return Parent;
+
+                    return null;
+                }
+            }
+            public int Profondeur
+            {
+                get
+                {
+                    int count = 0;
+
+                    if (Parent == null)
+                        return 0;
+                    else
+                    {
+                        while (Parent != null)
+                            count++;
+                    }
+                    return count;
+                }
+            }
+            public Noeud PlusGauche
+            {
+                get
+                {
+                     while (Gauche != null)
+                     return Gauche;
+
+                    return null;
+                }
+            }
+            public Noeud PlusDroite
+            {
+                get
+                {
+                    while (Droite != null)
+                        return Droite;
+
+                    return null;
+                }
+            }
 
 
             //-----Affichage-----
@@ -291,7 +334,6 @@ namespace ArbreBinLib
                 }
                 return 0;
             }
-
             return listeLargeurs.ToArray();
         }
 
@@ -300,14 +342,75 @@ namespace ArbreBinLib
 
         // ---------------- 4 - Recherche -----------------
 
-        public static Noeud? ChercherPc(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+        public static Noeud? ChercherPc(Noeud? arbre, TKey clé)
+        {
+            Noeud noeud = null;
+            parcourir(arbre, clé);
+            return noeud;
 
-        public static Noeud? ChercherPa(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+            void parcourir(Noeud? p_arbre, TKey key)
+            {
+                if (p_arbre is null) return;
+                else
+                {
+                    if (p_arbre.Key.CompareTo(key) == 0)
+                    {
+                        noeud = p_arbre;
+                    }
+                    parcourir(p_arbre.Gauche, key);
+                    parcourir(p_arbre.Droite, key);
+                }
+            }
 
-        public static Noeud? Chercher(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+        }
 
-        public static Noeud? ChercherR(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+        public static Noeud? ChercherPa(Noeud? arbre, TKey clé)
+        {
+            Noeud noeud = null;
+            parcourir(arbre, clé);
+            return noeud;
 
+            void parcourir(Noeud? p_arbre, TKey key)
+            {
+                if (p_arbre is null) return;
+                else
+                {
+                    if (p_arbre.Key.CompareTo(key) == 0)
+                    {
+                        noeud = p_arbre;
+                        
+                        return;
+                    }
+                    parcourir(p_arbre.Gauche, key);
+                    parcourir(p_arbre.Droite, key);
+                }
+            }
+        }
 
+        public static Noeud? Chercher(Noeud? arbre, TKey clé)
+        {
+            Noeud noeud = null;
+            parcourir(arbre, clé);
+            return noeud;
+
+            void parcourir(Noeud? p_arbre, TKey key)
+            {
+                if (p_arbre is null) return;
+                else
+                {
+                    if (p_arbre.Key.CompareTo(key) == 0)
+                    {
+                        noeud = p_arbre;
+
+                        return;
+                    }
+                    parcourir(p_arbre.Gauche, key);
+                    parcourir(p_arbre.Droite, key);
+                }
+            }
+        }
+
+        public static Noeud? ChercherR(Noeud? arbre, TKey clé) => arbre is null ?
+            null : Chercher(arbre, clé);
     }
 }
