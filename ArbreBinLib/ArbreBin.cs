@@ -44,7 +44,7 @@ namespace ArbreBinLib
                 get
                 {
                     while (Parent != null)
-                    return Parent;
+                        return Parent;
 
                     return null;
                 }
@@ -69,8 +69,8 @@ namespace ArbreBinLib
             {
                 get
                 {
-                     while (Gauche != null)
-                     return Gauche;
+                    while (Gauche != null)
+                        return Gauche;
 
                     return null;
                 }
@@ -337,7 +337,7 @@ namespace ArbreBinLib
             return listeLargeurs.ToArray();
         }
 
-        public static int Largeur(Noeud? arbre) => arbre is null? 0: Largeurs(arbre).Max();  // table.Max(x => x.Status)
+        public static int Largeur(Noeud? arbre) => arbre is null ? 0 : Largeurs(arbre).Max();  // table.Max(x => x.Status)
 
 
         // ---------------- 4 - Recherche -----------------
@@ -378,7 +378,7 @@ namespace ArbreBinLib
                     if (p_arbre.Key.CompareTo(key) == 0)
                     {
                         noeud = p_arbre;
-                        
+
                         return;
                     }
                     parcourir(p_arbre.Gauche, key);
@@ -414,49 +414,94 @@ namespace ArbreBinLib
             null : Chercher(arbre, clé);
 
 
-        public static void PréOrdre(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
-        
-        public static void EnOrdre(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
-        
-        public static void PostOrdre(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
-        
-        public static void EnOrdreInverse(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
-        
+        public static void PréOrdre(Noeud? noeud, Action<Noeud> visiter)
+        {
+            if (noeud is null) return;
+            visiter(noeud);
+            PréOrdre(noeud.Gauche, visiter);
+            PréOrdre(noeud.Droite, visiter);
+        }
+
+        public static void EnOrdre(Noeud? noeud, Action<Noeud> visiter)
+        {
+            if (noeud is null) return;
+            EnOrdre(noeud.Gauche, visiter);
+            visiter(noeud);
+            EnOrdre(noeud.Droite, visiter);
+        }
+
+        public static void PostOrdre(Noeud? noeud, Action<Noeud> visiter)
+        {
+            if (noeud is null) return;
+            PostOrdre(noeud.Gauche, visiter);
+            PostOrdre(noeud.Droite, visiter);
+            visiter(noeud);
+        }
+
+        public static void EnOrdreInverse(Noeud? noeud, Action<Noeud> visiter)
+        {
+            if (noeud is null) return;
+            EnOrdreInverse(noeud.Droite, visiter);
+            visiter(noeud);
+            EnOrdreInverse(noeud.Gauche, visiter);
+        }
+
         public static void EnLargeur(Noeud? arbre, Action<Noeud> visiter) => throw new NotImplementedException();
-        
-        public static void EnOrdreItératif(Noeud? arbre, Action<Noeud> visiter) => throw new NotImplementedException();
-        
-        public static bool EnOrdreAbrégé(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
+
+        public static void EnOrdreItératif(Noeud? arbre, Action<Noeud> visiter)
+        {
+            if (arbre is null) return;
+
+            Stack<Noeud> s = new Stack<Noeud>();
+             
+            while (arbre != null || s.Count > 0)
+            {
+                if (arbre != null)
+                {
+                    s.Push(arbre);
+                    arbre = arbre.Gauche;
+                }
+                else
+                {
+                    arbre = s.Pop();
+                    visiter(arbre);
+                    arbre = arbre.Droite;
+                }
+            }
+        }
 
 
-        public static int TailleV(Noeud? arbre) => throw new NotImplementedException();
-
-        public static int NbFeuillesV(Noeud? arbre) => throw new NotImplementedException();
-
-        public static (int NbEmbranchements, int NbTigesGauches, int NbTigesDroites, int NbFeuilles)
-            NbToutesEspècesV(Noeud? arbre) => throw new NotImplementedException();
-
-        public static Noeud? ChercherV(Noeud? arbre, TKey clé) => throw new NotImplementedException();
-
-        public static Noeud? ChercherVX(Noeud? arbre, TKey clé) => throw new NotImplementedException();
-
-        public static Noeud? ChercherVA(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+    public static bool EnOrdreAbrégé(Noeud? noeud, Action<Noeud> visiter) => throw new NotImplementedException();
 
 
-        public static List<Noeud> NoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
+    public static int TailleV(Noeud? arbre) => throw new NotImplementedException();
 
-        public static List<Noeud> Noeuds(Noeud? arbre, Action<Noeud?, Action<Noeud>> parcours) => throw new NotImplementedException();
+    public static int NbFeuillesV(Noeud? arbre) => throw new NotImplementedException();
 
-        public static List<Noeud> NoeudsPréOrdre(Noeud? arbre) => throw new NotImplementedException();
+    public static (int NbEmbranchements, int NbTigesGauches, int NbTigesDroites, int NbFeuilles)
+        NbToutesEspècesV(Noeud? arbre) => throw new NotImplementedException();
 
-        public static IEnumerable<Noeud> YieldNoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
+    public static Noeud? ChercherV(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+
+    public static Noeud? ChercherVX(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+
+    public static Noeud? ChercherVA(Noeud? arbre, TKey clé) => throw new NotImplementedException();
 
 
-        public static IEnumerable<Noeud> CinqPremiersL(Noeud? arbre) => throw new NotImplementedException();
+    public static List<Noeud> NoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
 
-        public static IEnumerable<Noeud> CinqPremiersVA(Noeud? arbre) => throw new NotImplementedException();
+    public static List<Noeud> Noeuds(Noeud? arbre, Action<Noeud?, Action<Noeud>> parcours) => throw new NotImplementedException();
 
-        public static IEnumerable<Noeud> CinqPremiersY(Noeud? arbre) => throw new NotImplementedException();
+    public static List<Noeud> NoeudsPréOrdre(Noeud? arbre) => throw new NotImplementedException();
 
-    }
+    public static IEnumerable<Noeud> YieldNoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
+
+
+    public static IEnumerable<Noeud> CinqPremiersL(Noeud? arbre) => throw new NotImplementedException();
+
+    public static IEnumerable<Noeud> CinqPremiersVA(Noeud? arbre) => throw new NotImplementedException();
+
+    public static IEnumerable<Noeud> CinqPremiersY(Noeud? arbre) => throw new NotImplementedException();
+
+}
 }
