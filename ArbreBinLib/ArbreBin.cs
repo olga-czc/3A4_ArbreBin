@@ -447,7 +447,14 @@ namespace ArbreBinLib
             EnOrdreInverse(noeud.Gauche, visiter);
         }
 
-        public static void EnLargeur(Noeud? arbre, Action<Noeud> visiter) => throw new NotImplementedException();
+        public static void EnLargeur(Noeud? arbre, Action<Noeud> visiter)
+        {
+            int level = 0;
+            if (arbre is null) return;
+            EnLargeur(arbre.Gauche, visiter);
+            visiter(arbre);
+            EnLargeur(arbre.Droite, visiter);
+        }
 
         public static void EnOrdreItératif(Noeud? arbre, Action<Noeud> visiter)
         {
@@ -478,36 +485,90 @@ namespace ArbreBinLib
         public static int TailleV(Noeud? arbre)
         {
             int compte = 0;
-            PréOrdre(arbre, _ => { if (arbre.Gauche is null && arbre.Droite is null) { compte++; } });
+            PréOrdre(arbre, _ => compte++);
             return compte;
         }
 
         public static int NbFeuillesV(Noeud? arbre)
         {
-            int compte = 0;
-            PréOrdre(arbre, _ => compte++);
-            return compte;
+            int nbFeuilles = 0;
+            PréOrdre(arbre, _ => { if (arbre.Espèce == EspèceDeNoeud.Feuille) { nbFeuilles++; } });
+            return nbFeuilles;
 
         }
 
         public static (int NbEmbranchements, int NbTigesGauches, int NbTigesDroites, int NbFeuilles)
-            NbToutesEspècesV(Noeud? arbre) => throw new NotImplementedException();
+            NbToutesEspècesV(Noeud? arbre)
+        {
+            int nbEmbranchements = 0;
+            int nbTigesGauches = 0;
+            int nbTigesDroites = 0;
+            int nbFeuilles = 0;
 
-        public static Noeud? ChercherV(Noeud? arbre, TKey clé) => throw new NotImplementedException();
+            PréOrdre(arbre, _ => 
+            {
+                if (arbre is null) return;
+
+                else
+                {
+                    if (arbre.Espèce == EspèceDeNoeud.Embranchement)
+                        nbEmbranchements++;
+                    if (arbre.Espèce == EspèceDeNoeud.TigeGauche)
+                        nbTigesGauches++;
+                    if (arbre.Espèce == EspèceDeNoeud.TigeDroite)
+                        nbTigesDroites++;
+                    if (arbre.Espèce == EspèceDeNoeud.Feuille)
+                        nbFeuilles++;
+                }
+            });
+            return (nbEmbranchements, nbTigesGauches, nbTigesDroites, nbFeuilles);
+        }
+
+        public static Noeud? ChercherV(Noeud? arbre, TKey clé)
+        {
+            Noeud noeud = null;
+
+            PréOrdre(arbre, _ =>
+            {
+                if (arbre is null) return;
+                else
+                {
+                    if (arbre.Key.CompareTo(clé) == 0)
+                    {
+                        noeud = arbre;
+                    }
+                }
+            });
+            return noeud;
+        }
 
         public static Noeud? ChercherVX(Noeud? arbre, TKey clé) => throw new NotImplementedException();
 
         public static Noeud? ChercherVA(Noeud? arbre, TKey clé) => throw new NotImplementedException();
 
 
-        public static List<Noeud> NoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
+        public static List<Noeud> NoeudsEnOrdre(Noeud? arbre)
+        {
+            List<Noeud> liste = new List<Noeud>();
+            EnOrdre(arbre, _ => { if (arbre is null) return; else liste.Add(_); }) ;
+            return liste;
+        }
 
-        public static List<Noeud> Noeuds(Noeud? arbre, Action<Noeud?, Action<Noeud>> parcours) => throw new NotImplementedException();
+        public static List<Noeud> Noeuds(Noeud? arbre, Action<Noeud?, Action<Noeud>> parcours)
+        {
+            List<Noeud> liste = new List<Noeud>();
+            EnOrdre(arbre, _ => { if (arbre is null) return; else liste.Add(_); });
+            return liste;
+        }
 
-        public static List<Noeud> NoeudsPréOrdre(Noeud? arbre) => throw new NotImplementedException();
+        public static List<Noeud> NoeudsPréOrdre(Noeud? arbre)
+        {
+            List<Noeud> liste = new List<Noeud>();
+            PréOrdre(arbre, _ => { if (arbre is null) return; else liste.Add(_); });
+            return liste;
+        }
 
         public static IEnumerable<Noeud> YieldNoeudsEnOrdre(Noeud? arbre) => throw new NotImplementedException();
-
 
         public static IEnumerable<Noeud> CinqPremiersL(Noeud? arbre) => throw new NotImplementedException();
 
