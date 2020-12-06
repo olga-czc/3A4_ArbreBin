@@ -47,8 +47,25 @@ namespace ArbreBinLib
             }
         }
 
-        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesTypiques() => throw new NotImplementedException();
-        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesSpéciaux() => throw new NotImplementedException();
+        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesTypiques()
+        {
+            yield return new SyntaxNode("3");
+            yield return new SyntaxNode("*", droite: new SyntaxNode("3"), gauche: new SyntaxNode("7"));
+            yield return new SyntaxNode("+", droite: new SyntaxNode("7"), gauche: new SyntaxNode("*", droite: new SyntaxNode("9"), gauche: new SyntaxNode("+", droite: new SyntaxNode("3"), gauche: new SyntaxNode("2"))));
+            yield return new SyntaxNode("+", droite: new SyntaxNode("*", droite: new SyntaxNode("2"), gauche: new SyntaxNode("+", droite: new SyntaxNode("9"), gauche: new SyntaxNode("5"))));
+            yield return new SyntaxNode("*", droite: new SyntaxNode("+", droite: new SyntaxNode("5"), gauche: new SyntaxNode("-", droite: new SyntaxNode("4"), gauche: new SyntaxNode("8"))), gauche: new SyntaxNode("+", droite: new SyntaxNode("3"), gauche: new SyntaxNode("2")));
+
+        }
+        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesSpéciaux()
+        {
+            yield return null;
+            yield return new SyntaxNode("deux");
+            yield return new SyntaxNode("*", droite: new SyntaxNode("3"));
+            yield return new SyntaxNode("+", gauche: new SyntaxNode("7"));
+            yield return new SyntaxNode("%", droite: new SyntaxNode("4"), gauche: new SyntaxNode("17"));
+            yield return new SyntaxNode("/", droite: new SyntaxNode("0"), gauche: new SyntaxNode("3"));
+            yield return new SyntaxNode("/", droite: new SyntaxNode("0"), gauche: new SyntaxNode("0"));
+        }
 
     }
 }
