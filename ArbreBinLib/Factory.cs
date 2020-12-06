@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using static ArbreBinLib.ArbreBin<int, int>;
+using SyntaxNode = ArbreBinLib.ArbreBin<string, string>.Noeud;
+
 
 namespace ArbreBinLib
 {
@@ -44,5 +46,9 @@ namespace ArbreBinLib
 
             }
         }
+
+        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesTypiques() => throw new NotImplementedException();
+        public static IEnumerable<SyntaxNode?> ArbresSyntaxiquesSpéciaux() => throw new NotImplementedException();
+
     }
 }

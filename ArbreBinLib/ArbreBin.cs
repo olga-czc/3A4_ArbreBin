@@ -39,7 +39,7 @@ namespace ArbreBinLib
             }
 
             // ----Propriétés additionnelles -----
-            public Noeud Racine
+            public Noeud? Racine
             {
 
                 get
@@ -66,7 +66,7 @@ namespace ArbreBinLib
                     return count;
                 }
             }
-            public Noeud PlusGauche
+            public Noeud? PlusGauche
             {
                 get
                 {
@@ -76,7 +76,7 @@ namespace ArbreBinLib
                     return null;
                 }
             }
-            public Noeud PlusDroite
+            public Noeud? PlusDroite
             {
                 get
                 {
@@ -314,7 +314,7 @@ namespace ArbreBinLib
 
             for (int i = 1; i <= hauteur; i++)
             {
-                listeLargeurs.Add(obtLargeur(arbre, i));
+                listeLargeurs.Add(obtLargeur(arbre!, i));
             }
 
             int obtLargeur(Noeud noeud, int level)
@@ -330,8 +330,8 @@ namespace ArbreBinLib
                 }
                 else if (level > 1)
                 {
-                    return obtLargeur(noeud.Gauche, level - 1)
-                        + obtLargeur(noeud.Droite, level - 1);
+                    return obtLargeur(noeud.Gauche!, level - 1)
+                        + obtLargeur(noeud.Droite!, level - 1);
                 }
                 return 0;
             }
@@ -345,7 +345,7 @@ namespace ArbreBinLib
 
         public static Noeud? ChercherPc(Noeud? arbre, TKey clé)
         {
-            Noeud noeud = null;
+            Noeud? noeud = null;
             parcourir(arbre, clé);
             return noeud;
 
@@ -367,7 +367,7 @@ namespace ArbreBinLib
 
         public static Noeud? ChercherPa(Noeud? arbre, TKey clé)
         {
-            Noeud noeud = null;
+            Noeud? noeud = null;
             parcourir(arbre, clé);
             return noeud;
 
@@ -390,7 +390,7 @@ namespace ArbreBinLib
 
         public static Noeud? Chercher(Noeud? arbre, TKey clé)
         {
-            Noeud noeud = null;
+            Noeud? noeud = null;
             parcourir(arbre, clé);
             return noeud;
 
@@ -449,7 +449,6 @@ namespace ArbreBinLib
 
         public static void EnLargeur(Noeud? arbre, Action<Noeud> visiter)
         {
-            int level = 0;
             if (arbre is null) return;
             EnLargeur(arbre.Gauche, visiter);
             visiter(arbre);
@@ -492,7 +491,7 @@ namespace ArbreBinLib
         public static int NbFeuillesV(Noeud? arbre)
         {
             int nbFeuilles = 0;
-            PréOrdre(arbre, _ => { if (arbre.Espèce == EspèceDeNoeud.Feuille) { nbFeuilles++; } });
+            PréOrdre(arbre, _ => { if (arbre!.Espèce == EspèceDeNoeud.Feuille) { nbFeuilles++; } });
             return nbFeuilles;
 
         }
@@ -526,7 +525,7 @@ namespace ArbreBinLib
 
         public static Noeud? ChercherV(Noeud? arbre, TKey clé)
         {
-            Noeud noeud = null;
+            Noeud? noeud = null;
 
             PréOrdre(arbre, _ =>
             {
@@ -575,6 +574,18 @@ namespace ArbreBinLib
         public static IEnumerable<Noeud> CinqPremiersVA(Noeud? arbre) => throw new NotImplementedException();
 
         public static IEnumerable<Noeud> CinqPremiersY(Noeud? arbre) => throw new NotImplementedException();
+
+
+        public static string SyntaxePostfixée(Noeud? arbre) => throw new NotImplementedException();
+
+        public static string SyntaxePréfixée(Noeud? arbre) => throw new NotImplementedException();
+
+        public static string SyntaxeInfixée(Noeud? arbre) => throw new NotImplementedException();
+
+        public static int EvalInt(Noeud? arbre) => throw new NotImplementedException();
+
+        public static double EvalDouble(Noeud? arbre) => throw new NotImplementedException();
+
 
     }
 }
