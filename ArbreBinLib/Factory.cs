@@ -52,7 +52,7 @@ namespace ArbreBinLib
             yield return new SyntaxNode("3");
             yield return new SyntaxNode("*", droite: new SyntaxNode("3"), gauche: new SyntaxNode("7"));
             yield return new SyntaxNode("+", droite: new SyntaxNode("7"), gauche: new SyntaxNode("*", droite: new SyntaxNode("9"), gauche: new SyntaxNode("+", droite: new SyntaxNode("3"), gauche: new SyntaxNode("2"))));
-            yield return new SyntaxNode("+", droite: new SyntaxNode("*", droite: new SyntaxNode("2"), gauche: new SyntaxNode("+", droite: new SyntaxNode("9"), gauche: new SyntaxNode("5"))));
+            yield return new SyntaxNode("+", droite: new SyntaxNode("*", droite: new SyntaxNode("2"), gauche: new SyntaxNode("+", droite: new SyntaxNode("9"), gauche: new SyntaxNode("5"))), gauche: new SyntaxNode("3"));
             yield return new SyntaxNode("*", droite: new SyntaxNode("+", droite: new SyntaxNode("5"), gauche: new SyntaxNode("-", droite: new SyntaxNode("4"), gauche: new SyntaxNode("8"))), gauche: new SyntaxNode("+", droite: new SyntaxNode("3"), gauche: new SyntaxNode("2")));
 
         }

@@ -576,11 +576,12 @@ namespace ArbreBinLib
         public static IEnumerable<Noeud> CinqPremiersY(Noeud? arbre) => throw new NotImplementedException();
 
 
-        public static string SyntaxePostfixée(Noeud? arbre) => throw new NotImplementedException();
+        public static string SyntaxePostfixée(Noeud? arbre) => arbre.Lister(PostOrdre);
+        
 
-        public static string SyntaxePréfixée(Noeud? arbre) => throw new NotImplementedException();
+        public static string SyntaxePréfixée(Noeud? arbre) => arbre.Lister(PréOrdre);
 
-        public static string SyntaxeInfixée(Noeud? arbre) => throw new NotImplementedException();
+        public static string SyntaxeInfixée(Noeud? arbre) => arbre.Lister(EnOrdre);
 
         public static int EvalInt(Noeud? arbre) => throw new NotImplementedException();
 
