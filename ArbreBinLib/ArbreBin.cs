@@ -1,9 +1,11 @@
-﻿using System;
+﻿using cstjean.info.fg.utilitaire.extensions;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using CodingSeb.ExpressionEvaluator;
 
 namespace ArbreBinLib
 {
@@ -504,7 +506,7 @@ namespace ArbreBinLib
             int nbTigesDroites = 0;
             int nbFeuilles = 0;
 
-            PréOrdre(arbre, _ => 
+            PréOrdre(arbre, _ =>
             {
                 if (arbre is null) return;
 
@@ -549,7 +551,7 @@ namespace ArbreBinLib
         public static List<Noeud> NoeudsEnOrdre(Noeud? arbre)
         {
             List<Noeud> liste = new List<Noeud>();
-            EnOrdre(arbre, _ => { if (arbre is null) return; else liste.Add(_); }) ;
+            EnOrdre(arbre, _ => { if (arbre is null) return; else liste.Add(_); });
             return liste;
         }
 
@@ -577,16 +579,51 @@ namespace ArbreBinLib
 
 
         public static string SyntaxePostfixée(Noeud? arbre) => arbre.Lister(PostOrdre);
-        
 
-        public static string SyntaxePréfixée(Noeud? arbre) => arbre.Lister(PréOrdre);
 
+        public static string SyntaxePréfixée(Noeud? arbre) /*=> NoeudsPréOrdre(arbre).Select(n => n.Value).Aggregate(n, ;*/
+        {
+            string list = "";
+            PréOrdre(arbre, _ =>
+            {
+                if (arbre is null)
+                    return;
+                if (arbre.Gauche is null && arbre.Droite is null)
+                    list += arbre.Key;
+                if (_.Espèce == EspèceDeNoeud.Embranchement)
+                {
+                    var g = "" + _.Gauche.Key;
+                    var d = "" + _.Droite.Key;
+                    if (_.Gauche.Espèce == EspèceDeNoeud.Embranchement)
+                        g = SyntaxePréfixée(_.Gauche);
+                    if (_.Droite.Espèce == EspèceDeNoeud.Embranchement)
+                        d = SyntaxePréfixée(_.Droite);
+                    list += string.Format("{0}{1} {2} {3}{4}",
+                "(", _.Key, g, d, ")");
+                }
+            });
+
+            return list;
+        }
         public static string SyntaxeInfixée(Noeud? arbre) => arbre.Lister(EnOrdre);
 
-        public static int EvalInt(Noeud? arbre) => throw new NotImplementedException();
+        public static int EvalInt(Noeud? arbre) =>
+            (int)new ExpressionEvaluator().Evaluate(arbre.Lister(EnOrdre));
 
-        public static double EvalDouble(Noeud? arbre) => throw new NotImplementedException();
+        public static double EvalDouble(Noeud? arbre)
+        {
+            if (arbre != null)
+            {
+                ExpressionEvaluator evaluator = new ExpressionEvaluator();
+                string texte = arbre.Lister(EnOrdre);
+                int value = (int)evaluator.Evaluate(texte);
+                return value;
+            }
+            else
+                throw new ArgumentNullException("", "L'arbre évalué ne peut pas être vide");
+        }
 
-
+        //  public static double EvalDouble(Noeud? arbre) => arbre is null ? throw new ArgumentNullException("", "L'arbre évalué ne peut pas être vide") : 
+        //    (double)new ExpressionEvaluator().Evaluate(arbre.Lister(EnOrdre));
     }
 }
