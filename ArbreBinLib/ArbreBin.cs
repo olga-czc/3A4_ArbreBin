@@ -167,10 +167,10 @@ namespace ArbreBinLib
 
         // -------------- 1 - Dénombrement de base ----------------
 
-
+        // Récursivité directe
         public static int TailleR(Noeud? arbre) => arbre == null ? 0 : (TailleR(arbre.Gauche) + TailleR(arbre.Droite) + 1);
 
-
+        // Récursivité indirecte, c'est a dire interne (parcourir l'arbre)
         public static int TailleP(Noeud? arbre)
         {
             int taille = 0;
@@ -186,11 +186,12 @@ namespace ArbreBinLib
             }
         }
 
+        // Récursivité directe
         public static int NbFeuillesR(Noeud? arbre) => arbre is null ? 0 :
             arbre.Gauche is null && arbre.Droite is null ? 1 :
             (NbFeuillesR(arbre.Gauche) + NbFeuillesR(arbre.Droite));
 
-
+        // Récursivité indirecte (parcours)
         public static int NbFeuillesP(Noeud? arbre)
         {
             int nbFeuilles = 0;
@@ -345,6 +346,7 @@ namespace ArbreBinLib
 
         // ---------------- 4 - Recherche -----------------
 
+        // Récursivité indirecte, parcours complet (non abrégée)
         public static Noeud? ChercherPc(Noeud? arbre, TKey clé)
         {
             Noeud? noeud = null;
@@ -367,6 +369,7 @@ namespace ArbreBinLib
 
         }
 
+        // Récursivité indirecte, parcours abrégée
         public static Noeud? ChercherPa(Noeud? arbre, TKey clé)
         {
             Noeud? noeud = null;
@@ -413,6 +416,7 @@ namespace ArbreBinLib
             }
         }
 
+        // Récursivité directe (et abrégée)
         public static Noeud? ChercherR(Noeud? arbre, TKey clé) => arbre is null ?
             null : Chercher(arbre, clé);
 
