@@ -10,22 +10,22 @@ namespace ArbreBinLib
         public static TKey MaxP(Noeud? arbre)
         {
             TKey cleMax = default;
-            parcourir(arbre, cleMax);
+            parcourir(arbre);
             return cleMax;
 
-            void parcourir(Noeud? p_arbre, TKey key)
+            void parcourir(Noeud? p_arbre)
             {
                 if (p_arbre is null)
                     return;
-              
+
                 else
                 {
-                    if (p_arbre.Key.CompareTo(key) == 1)
+                    if (p_arbre.Key.CompareTo(cleMax) == 1)
                     {
-                        key = p_arbre.Key;
+                        cleMax = p_arbre.Key;
                     }
-                    parcourir(p_arbre.Gauche, key);
-                    parcourir(p_arbre.Droite, key);
+                    parcourir(p_arbre.Gauche);
+                    parcourir(p_arbre.Droite);
                 }
             }
         }
@@ -45,29 +45,31 @@ namespace ArbreBinLib
                     else
                         noeud = obtenirNoeud(arbre, n);
                 }
+                //MyString[0]
 
+            }
 
-                Noeud obtenirNoeud(Noeud arbre, char n)
+            Noeud obtenirNoeud(Noeud arbre, char n)
+            {
+                if (n == 'G')
                 {
-                    if (n == 'G')
-                    {
-                        if (arbre.Gauche != null)
-                            noeud = CheminerR(arbre.Gauche, chemin);
-                        else
-                            noeud = null;
-                    }
-                    else if (n == 'D')
-                    {
-                        if (arbre.Droite != null)
-                            noeud = CheminerR(arbre.Droite, chemin);
-                        else
-                            noeud = null;
-                    }
+                    if (arbre.Gauche != null)
+                        noeud = CheminerR(arbre.Gauche, chemin);
                     else
-                        throw new ArgumentException("", "Lettre cheminante invalide: " + n);
-
-                    return noeud;
+                        noeud = null;
                 }
+                else if (n == 'D')
+                {
+                    if (arbre.Droite != null)
+                        noeud = CheminerR(arbre.Droite, chemin);
+                    else
+                        noeud = null;
+                }
+                else
+                    
+                    throw new ArgumentException("Lettre cheminante invalide: " + n);
+
+                return noeud;
             }
 
             return noeud;

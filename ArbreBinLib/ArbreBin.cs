@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using CodingSeb.ExpressionEvaluator;
+using System.Text.RegularExpressions;
 
 namespace ArbreBinLib
 {
@@ -585,49 +586,70 @@ namespace ArbreBinLib
         public static string SyntaxePostfixée(Noeud? arbre) => arbre.Lister(PostOrdre);
 
 
-        public static string SyntaxePréfixée(Noeud? arbre) /*=> NoeudsPréOrdre(arbre).Select(n => n.Value).Aggregate(n, ;*/
-        {
-            string list = "";
-            PréOrdre(arbre, _ =>
-            {
-                if (arbre is null)
-                    return;
-                if (arbre.Gauche is null && arbre.Droite is null)
-                    list += arbre.Key;
-                if (_.Espèce == EspèceDeNoeud.Embranchement)
-                {
-                    var g = "" + _.Gauche.Key;
-                    var d = "" + _.Droite.Key;
-                    if (_.Gauche.Espèce == EspèceDeNoeud.Embranchement)
-                        g = SyntaxePréfixée(_.Gauche);
-                    if (_.Droite.Espèce == EspèceDeNoeud.Embranchement)
-                        d = SyntaxePréfixée(_.Droite);
-                    list += string.Format("{0}{1} {2} {3}{4}",
-                "(", _.Key, g, d, ")");
-                }
-            });
+        public static string SyntaxePréfixée(Noeud? arbre) => arbre is null ? "" : 
+            arbre.Espèce == EspèceDeNoeud.Embranchement ? "(" + arbre.Key + " " +
+            SyntaxePréfixée(arbre.Gauche) + " " + SyntaxePréfixée(arbre.Droite) + ")" :
+            arbre.Key + SyntaxePréfixée(arbre.Gauche) + SyntaxePréfixée(arbre.Droite);     
+        
+        
+       
 
-            return list;
+        public static string SyntaxeInfixée(Noeud? arbre)
+        {
+            string texte = parcourir(arbre);
+            if (texte[0] == '(' && texte[texte.Length-1] == ')')
+               texte = texte.Substring(1, texte.Length - 2);
+            return texte;
+
+            string parcourir(Noeud? p_arbre)
+            {
+                if (p_arbre is null)
+                    return "";
+                else
+                {
+                    var g = parcourir(p_arbre.Gauche);
+                    var d = parcourir(p_arbre.Droite);
+                    if (p_arbre.Espèce == EspèceDeNoeud.Embranchement)
+                        return "(" + g + " " + p_arbre.Key + " " + d + ")";
+                    return g + p_arbre.Key + d;
+                }
+            }
         }
-        public static string SyntaxeInfixée(Noeud? arbre) => arbre.Lister(EnOrdre);
 
         public static int EvalInt(Noeud? arbre) =>
-            (int)new ExpressionEvaluator().Evaluate(arbre.Lister(EnOrdre));
+            (int)new ExpressionEvaluator().Evaluate(SyntaxeInfixée(arbre));
 
         public static double EvalDouble(Noeud? arbre)
         {
+            (int nbEmbr, int nbTigeG, int nbTigeD, int nbFeuilles) = NbToutesEspècesV(arbre);
+            Regex rx = new Regex(@"[\d]");
+
+            
             if (arbre != null)
             {
-                ExpressionEvaluator evaluator = new ExpressionEvaluator();
-                string texte = arbre.Lister(EnOrdre);
-                int value = (int)evaluator.Evaluate(texte);
-                return value;
+                if (nbTigeD > nbTigeG)
+                    throw new System.Data.SyntaxErrorException("Manque argument de gauche @ " + arbre.ToString());
+                if (nbTigeD < nbTigeG)
+                    throw new System.Data.SyntaxErrorException("Manque argument de droite @ " + arbre.ToString());
+                
+                else
+                {
+                    ExpressionEvaluator evaluator = new ExpressionEvaluator();
+                    string texte = SyntaxeInfixée(arbre);
+                    if (!rx.IsMatch(texte))
+                        throw new FormatException("Nombre invalide @ R[" + texte + "]");
+                    else if (texte.Contains("%"))
+                        throw new System.Data.SyntaxErrorException("Opérateur inconnu @ R[.%.]");
+                    else if (texte.Contains("0 / 0"))
+                        return Double.NaN;
+                    else if (texte.Contains("/ 0"))
+                        return Double.PositiveInfinity;
+                    return (int)evaluator.Evaluate(texte);
+                }
             }
             else
                 throw new ArgumentNullException("", "L'arbre évalué ne peut pas être vide");
-        }
 
-        //  public static double EvalDouble(Noeud? arbre) => arbre is null ? throw new ArgumentNullException("", "L'arbre évalué ne peut pas être vide") : 
-        //    (double)new ExpressionEvaluator().Evaluate(arbre.Lister(EnOrdre));
+        }
     }
 }
