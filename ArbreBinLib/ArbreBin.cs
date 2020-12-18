@@ -586,19 +586,17 @@ namespace ArbreBinLib
         public static string SyntaxePostfixée(Noeud? arbre) => arbre.Lister(PostOrdre);
 
 
-        public static string SyntaxePréfixée(Noeud? arbre) => arbre is null ? "" : 
+        public static string SyntaxePréfixée(Noeud? arbre) => arbre is null ? "" :
             arbre.Espèce == EspèceDeNoeud.Embranchement ? "(" + arbre.Key + " " +
             SyntaxePréfixée(arbre.Gauche) + " " + SyntaxePréfixée(arbre.Droite) + ")" :
-            arbre.Key + SyntaxePréfixée(arbre.Gauche) + SyntaxePréfixée(arbre.Droite);     
-        
-        
-       
+            arbre.Key + SyntaxePréfixée(arbre.Gauche) + SyntaxePréfixée(arbre.Droite);
+
 
         public static string SyntaxeInfixée(Noeud? arbre)
         {
             string texte = parcourir(arbre);
-            if (texte[0] == '(' && texte[texte.Length-1] == ')')
-               texte = texte.Substring(1, texte.Length - 2);
+            if (texte[0] == '(' && texte[texte.Length - 1] == ')')
+                texte = texte.Substring(1, texte.Length - 2);
             return texte;
 
             string parcourir(Noeud? p_arbre)
@@ -624,14 +622,13 @@ namespace ArbreBinLib
             (int nbEmbr, int nbTigeG, int nbTigeD, int nbFeuilles) = NbToutesEspècesV(arbre);
             Regex rx = new Regex(@"[\d]");
 
-            
             if (arbre != null)
             {
                 if (nbTigeD > nbTigeG)
                     throw new System.Data.SyntaxErrorException("Manque argument de gauche @ " + arbre.ToString());
                 if (nbTigeD < nbTigeG)
                     throw new System.Data.SyntaxErrorException("Manque argument de droite @ " + arbre.ToString());
-                
+
                 else
                 {
                     ExpressionEvaluator evaluator = new ExpressionEvaluator();
@@ -639,7 +636,7 @@ namespace ArbreBinLib
                     if (!rx.IsMatch(texte))
                         throw new FormatException("Nombre invalide @ R[" + texte + "]");
                     else if (texte.Contains("%"))
-                        throw new System.Data.SyntaxErrorException("Opérateur inconnu @ R[.%.]");
+                        throw new System.Data.SyntaxErrorException("Opérateur inconnu @ R[." + texte.Substring(3, 1) + ".]");
                     else if (texte.Contains("0 / 0"))
                         return Double.NaN;
                     else if (texte.Contains("/ 0"))
@@ -649,7 +646,6 @@ namespace ArbreBinLib
             }
             else
                 throw new ArgumentNullException("", "L'arbre évalué ne peut pas être vide");
-
         }
     }
 }

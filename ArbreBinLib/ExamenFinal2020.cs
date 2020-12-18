@@ -34,45 +34,32 @@ namespace ArbreBinLib
         public static Noeud? CheminerR(Noeud? arbre, string chemin)
         {
             Noeud? noeud = null;
+
             if (arbre is null)
                 return noeud;
+
             else
             {
-                foreach (char n in chemin)
-                {
-                    if (chemin == null)
-                        return arbre.Racine;
-                    else
-                        noeud = obtenirNoeud(arbre, n);
-                }
-                //MyString[0]
+                if (chemin == "")
+                    return arbre;
 
-            }
+                var n = chemin[0];
 
-            Noeud obtenirNoeud(Noeud arbre, char n)
-            {
                 if (n == 'G')
                 {
                     if (arbre.Gauche != null)
-                        noeud = CheminerR(arbre.Gauche, chemin);
-                    else
-                        noeud = null;
+                        noeud = CheminerR(arbre.Gauche, chemin.Substring(1));
                 }
                 else if (n == 'D')
                 {
                     if (arbre.Droite != null)
-                        noeud = CheminerR(arbre.Droite, chemin);
-                    else
-                        noeud = null;
+                        noeud = CheminerR(arbre.Droite, chemin.Substring(1));
                 }
                 else
-                    
                     throw new ArgumentException("Lettre cheminante invalide: " + n);
 
                 return noeud;
             }
-
-            return noeud;
         }
     }
 }
